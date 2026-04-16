@@ -8,14 +8,15 @@ import LogsHistory from './pages/LogsHistory';
 import Categories from './pages/Categories';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Landing from './pages/Landing';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import * as api from './services/api';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-
-  if (loading) return null; // Or a loading spinner
-
+  
+  if (loading) return null;
+  
   if (!user) {
     return <Navigate to="/login" replace />;
   }
@@ -23,10 +24,13 @@ const ProtectedRoute = ({ children }) => {
   return <AppShell>{children}</AppShell>;
 };
 
-function App() {
+// 1. Move internal logic to a stable child component
+const ScanventoryInternal = () => {
   const [products, setProducts] = useState([]);
   const [logs, setLogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [appLoading, setAppLoading] = useState(true);
+  
+  const { user, loading: authLoading } = useAuth();
 
   const fetchData = async () => {
     try {
@@ -36,18 +40,23 @@ function App() {
     } catch (err) {
       console.error('Failed to fetch data', err);
     } finally {
-      setLoading(false);
+      setAppLoading(false);
     }
   };
 
   useEffect(() => {
-    // We'll fetch data after auth is ready and user exists
-    // But for now, let's keep it here and let api interceptor handle tokens
-  }, []);
+    if (!authLoading) {
+      if (user) {
+        fetchData();
+      } else {
+        setAppLoading(false);
+      }
+    }
+  }, [user, authLoading]);
 
   const handleScan = async (scanData) => {
     const response = await api.scanBarcode(scanData);
-    await fetchData();
+    await fetchData(); 
     return response;
   };
 
@@ -58,72 +67,82 @@ function App() {
   const productById = useMemo(() => new Map(products.map((p) => [p.id, p])), [products]);
 
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        
+        {/* App Routes (Protected) */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard 
+                products={products} 
+                logs={logs} 
+                loading={appLoading} 
+                productById={productById} 
+                refreshData={fetchData}
+              />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/products" 
+          element={
+            <ProtectedRoute>
+              <ProductManagement 
+                products={products} 
+                onProductChange={handleProductChange} 
+                productById={productById} 
+              />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/scan" 
+          element={
+            <ProtectedRoute>
+              <BarcodeScanner products={products} onScan={handleScan} />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/history" 
+          element={
+            <ProtectedRoute>
+              <LogsHistory logs={logs} productById={productById} />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/categories" 
+          element={
+            <ProtectedRoute>
+              <Categories products={products} loading={appLoading} />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+};
 
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Dashboard
-                  products={products}
-                  logs={logs}
-                  loading={loading}
-                  productById={productById}
-                  refreshData={fetchData}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/products"
-            element={
-              <ProtectedRoute>
-                <ProductManagement
-                  products={products}
-                  onProductChange={handleProductChange}
-                  productById={productById}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/scan"
-            element={
-              <ProtectedRoute>
-                <BarcodeScanner products={products} onScan={handleScan} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/history"
-            element={
-              <ProtectedRoute>
-                <LogsHistory logs={logs} productById={productById} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/categories"
-            element={
-              <ProtectedRoute>
-                <Categories products={products} loading={loading} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
+// 2. Main App component only provides the context
+function App() {
+  return (
+    <AuthProvider>
+      <ScanventoryInternal />
     </AuthProvider>
   );
 }
