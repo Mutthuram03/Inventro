@@ -9,7 +9,7 @@ const Navbar = () => {
   const inactiveClassName = "text-slate-600 hover:bg-slate-50 hover:text-primary";
 
   const navItems = [
-    { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/products", icon: Package, label: "Products" },
     { to: "/scan", icon: Barcode, label: "Scan" },
     { to: "/history", icon: History, label: "History" },
@@ -19,7 +19,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/login');
+      navigate('/');
     } catch (err) {
       console.error('Logout failed', err);
     }
@@ -31,9 +31,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <div className="flex items-center gap-2 group cursor-pointer" onClick={() => navigate('/')}>
-            <div className="p-2 bg-primary rounded-xl text-white transition-transform group-hover:scale-110">
-              <Package size={24} />
-            </div>
+            <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform" />
             <span className="text-xl font-bold tracking-tight text-slate-950">
               Scan<span className="text-primary font-extrabold">ventory</span>
             </span>
