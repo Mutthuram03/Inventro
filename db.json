@@ -7,6 +7,14 @@
       "barcode": "mouse-12345",
       "quantity": 6,
       "price": 10000
+    },
+    {
+      "id": "72460958-1b23-41e4-9308-2b8a6c850a18",
+      "name": "lays",
+      "category": "food",
+      "barcode": "snack--000",
+      "quantity": 233,
+      "price": 20
     }
   ],
   "logs": [
