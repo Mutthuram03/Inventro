@@ -1,0 +1,13 @@
+{
+  "products": [
+    {
+      "id": "03de7ce5-98b4-402a-8160-7e89a92db772",
+      "name": "Test Product",
+      "category": "Tech",
+      "barcode": "123456789",
+      "quantity": 10,
+      "price": 1500.25
+    }
+  ],
+  "logs": []
+}

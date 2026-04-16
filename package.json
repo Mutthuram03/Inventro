@@ -1,0 +1,20 @@
+{
+  "name": "scanventory",
+  "version": "1.0.0",
+  "description": "A simple inventory management system with barcode scanning.",
+  "main": "backend/index.js",
+  "scripts": {
+    "start": "node backend/index.js",
+    "dev:backend": "nodemon backend/index.js",
+    "dev:frontend": "npm run --prefix frontend dev",
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "setup": "npm install --prefix backend; npm install --prefix frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0"
+  }
+}
