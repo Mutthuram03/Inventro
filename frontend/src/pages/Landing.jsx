@@ -66,7 +66,12 @@ const Landing = () => {
               >
                 About
               </button>
-              <a href="mailto:support@scanventory.com" className="hover:text-primary transition-colors">Contact</a>
+              <button 
+                onClick={() => navigate('/contact')} 
+                className="hover:text-primary transition-colors"
+              >
+                Contact
+              </button>
             </div>
 
             <div className="flex items-center gap-4">
@@ -264,7 +269,14 @@ const Landing = () => {
               <h5 className="text-white font-bold mb-6">Company</h5>
               <ul className="space-y-4">
                 <li><button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-white transition-colors">About</button></li>
-                <li><a href="mailto:support@scanventory.com" className="hover:text-white transition-colors">Contact</a></li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/contact')} 
+                    className="hover:text-white transition-colors"
+                  >
+                    Contact
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
               </ul>
