@@ -53,7 +53,7 @@ const Login = () => {
             className="inline-flex p-1 mb-4 cursor-pointer hover:scale-110 transition-transform"
             onClick={() => navigate('/')}
           >
-            <img src="/logo.png" alt="Scanventory" className="w-16 h-16 object-contain" />
+            <img src="/logo.png" alt="Inventro" className="w-16 h-16 object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-slate-900">
             {isLogin ? 'Welcome Back' : 'Create Account'}
