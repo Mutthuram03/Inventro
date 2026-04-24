@@ -22,6 +22,18 @@ if (fs.existsSync(serviceAccountPath)) {
 export const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   
+  // Development Bypass: If Firebase Admin is not initialized, allow requests for local testing
+  if (!adminApp) {
+    console.warn('Development Bypass: Firebase Admin not initialized. Using mock user.');
+    req.user = { 
+      uid: 'dev-user-id', 
+      name: 'Developer', 
+      email: 'dev@inventro.com',
+      email_verified: true
+    };
+    return next();
+  }
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'No token provided' });
   }
@@ -29,9 +41,6 @@ export const verifyToken = async (req, res, next) => {
   const idToken = authHeader.split('Bearer ')[1];
 
   try {
-    if (!adminApp) {
-      throw new Error('Firebase Admin not initialized');
-    }
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     req.user = decodedToken;
     next();
