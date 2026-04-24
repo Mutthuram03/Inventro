@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // 1. Move internal logic to a stable child component
-const ScanventoryInternal = () => {
+const InventroInternal = () => {
   const [products, setProducts] = useState([]);
   const [logs, setLogs] = useState([]);
   const [appLoading, setAppLoading] = useState(true);
@@ -144,7 +144,7 @@ const ScanventoryInternal = () => {
 function App() {
   return (
     <AuthProvider>
-      <ScanventoryInternal />
+      <InventroInternal />
     </AuthProvider>
   );
 }
