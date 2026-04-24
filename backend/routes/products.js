@@ -8,10 +8,22 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const product = { id: Date.now().toString(), ...req.body };
-  db.data.products.push(product);
-  await db.write();
-  res.status(201).json(product);
+  try {
+    if (!db.data.products) db.data.products = [];
+    
+    const product = { 
+      id: Date.now().toString(), 
+      ...req.body,
+      createdAt: new Date().toISOString()
+    };
+    
+    db.data.products.push(product);
+    await db.write();
+    res.status(201).json(product);
+  } catch (error) {
+    console.error('Error creating product:', error);
+    res.status(500).json({ message: 'Failed to create product', error: error.message });
+  }
 });
 
 router.put('/:id', async (req, res) => {
