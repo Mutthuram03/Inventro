@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
               <Package size={24} />
             </div>
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Scanventory</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-2">Inventro</h2>
           <p className="text-slate-500 animate-pulse">Initializing application...</p>
         </div>
       </div>
