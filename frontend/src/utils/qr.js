@@ -1,5 +1,5 @@
 /**
- * Utility for QR code data encoding and decoding in Scanventory.
+ * Utility for QR code data encoding and decoding in Inventro.
  */
 
 /**
@@ -13,7 +13,7 @@ export const encodeProductQR = (product) => {
   const qrData = {
     id: product.id,
     name: product.name || 'Unknown',
-    source: 'scanventory'
+    source: 'inventro'
   };
   
   return JSON.stringify(qrData);
@@ -29,7 +29,7 @@ export const decodeProductQR = (rawData) => {
     const data = JSON.parse(rawData);
     
     // Basic validation
-    if (data && data.id && data.source === 'scanventory') {
+    if (data && data.id && data.source === 'inventro') {
       return data;
     }
     
