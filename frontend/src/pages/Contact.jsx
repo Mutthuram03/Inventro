@@ -51,7 +51,8 @@ const Contact = () => {
             setIsSent(true);
         }, (error) => {
             setIsSending(false);
-            setError('Failed to send message. Please check your credentials.');
+            const errorMsg = error?.text || 'Check your credentials or restart your terminal.';
+            setError(`Failed to send: ${errorMsg}`);
             console.error('EmailJS Error:', error);
         });
     } else {
@@ -96,9 +97,9 @@ const Contact = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-              <img src="/logo.png" alt="Scanventory Logo" className="w-10 h-10 object-contain" />
+              <img src="/logo.png" alt="Inventro Logo" className="w-10 h-10 object-contain" />
               <span className="text-xl font-bold tracking-tight text-slate-950">
-                Scan<span className="text-primary font-extrabold">ventory</span>
+                Inven<span className="text-primary font-extrabold">tro</span>
               </span>
             </div>
             
@@ -142,7 +143,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 mb-1">Email us</h4>
-                  <p className="text-slate-600">support@scanventory.com</p>
+                  <p className="text-slate-600">support@inventro.com</p>
                 </div>
               </div>
               
@@ -275,7 +276,7 @@ const Contact = () => {
 
       {/* Footer minimal */}
       <footer className="py-10 text-center text-slate-500 text-sm border-t border-slate-200 bg-white">
-        <p>© 2026 Scanventory. All rights reserved.</p>
+        <p>© 2026 Inventro. All rights reserved.</p>
       </footer>
     </div>
   );
