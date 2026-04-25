@@ -15,6 +15,33 @@
       "barcode": "snack--000",
       "quantity": 233,
       "price": 20
+    },
+    {
+      "id": "b34489cf-0e06-4d34-9682-fe714bd2c80b",
+      "name": "awfdfwf",
+      "category": "wqdff",
+      "barcode": "ef",
+      "quantity": 333,
+      "price": 3234,
+      "createdAt": "2026-04-25T13:11:56.159Z"
+    },
+    {
+      "id": "7796edbc-de43-40ee-9c38-3702b04c580e",
+      "name": "Test Product",
+      "category": "Test Category",
+      "barcode": "test-barcode-123",
+      "quantity": 10,
+      "price": 100,
+      "createdAt": "2026-04-25T13:20:14.423Z"
+    },
+    {
+      "id": "82900b4c-21d4-4c8d-b028-544db8d287cf",
+      "name": "Success Product",
+      "category": "Hardware",
+      "barcode": "success-123",
+      "quantity": 10,
+      "price": 50,
+      "createdAt": "2026-04-25T13:31:58.627Z"
     }
   ],
   "logs": [
