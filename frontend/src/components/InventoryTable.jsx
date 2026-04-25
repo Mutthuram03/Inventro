@@ -12,6 +12,7 @@ const InventoryTable = ({ products, onEdit, onDelete, onViewQR }) => {
               <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category</th>
               <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quantity</th>
               <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Price</th>
+              <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Value</th>
               <th className="px-6 py-4 text-right text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</th>
             </tr>
           </thead>
@@ -41,6 +42,9 @@ const InventoryTable = ({ products, onEdit, onDelete, onViewQR }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-bold text-slate-900">₹{product.price.toFixed(2)}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm font-black text-primary">₹{(product.quantity * product.price).toFixed(2)}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex justify-end gap-2">
