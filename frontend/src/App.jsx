@@ -11,7 +11,7 @@ import Profile from './pages/Profile';
 import Landing from './pages/Landing';
 import Contact from './pages/Contact';
 import { AuthProvider, useAuth } from './context/AuthContext';
-export * as api from './services/api'; 
+import * as api from './services/api'; 
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
