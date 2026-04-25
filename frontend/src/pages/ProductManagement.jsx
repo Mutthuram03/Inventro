@@ -12,6 +12,11 @@ const ProductManagement = ({ products, onProductChange }) => {
   const [qrProduct, setQrProduct] = useState(null);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
+  // Form State for dynamic calculation
+  const [formQuantity, setFormQuantity] = useState(0);
+  const [formPrice, setFormPrice] = useState(0); // Price per unit
+  const [formTotal, setFormTotal] = useState(0);
+
   const handleViewQR = (product) => {
     setQrProduct(product);
     setIsQRModalOpen(true);
@@ -19,12 +24,38 @@ const ProductManagement = ({ products, onProductChange }) => {
 
   const handleAddProduct = () => {
     setEditingProduct(null);
+    setFormQuantity(1);
+    setFormPrice(0);
+    setFormTotal(0);
     setIsModalOpen(true);
   };
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
+    setFormQuantity(product.quantity || 0);
+    setFormPrice(product.price || 0);
+    setFormTotal((product.quantity || 0) * (product.price || 0));
     setIsModalOpen(true);
+  };
+
+  const handleQuantityChange = (val) => {
+    const q = parseInt(val, 10) || 0;
+    setFormQuantity(q);
+    setFormTotal(q * formPrice);
+  };
+
+  const handlePriceChange = (val) => {
+    const p = parseFloat(val) || 0;
+    setFormPrice(p);
+    setFormTotal(formQuantity * p);
+  };
+
+  const handleTotalChange = (val) => {
+    const t = parseFloat(val) || 0;
+    setFormTotal(t);
+    if (formQuantity > 0) {
+      setFormPrice(t / formQuantity);
+    }
   };
 
   const handleDeleteProduct = async (id) => {
@@ -38,14 +69,15 @@ const ProductManagement = ({ products, onProductChange }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const productData = Object.fromEntries(formData.entries());
-    productData.quantity = parseInt(productData.quantity, 10);
-    productData.price = parseFloat(productData.price);
+    
+    // Use the calculated states
+    productData.quantity = formQuantity;
+    productData.price = formPrice;
 
     try {
       if (editingProduct) {
         await api.updateProduct(editingProduct.id, productData);
       } else {
-        // Provide a unique ID from frontend if backend allows
         productData.id = uuidv4();
         await api.createProduct(productData);
       }
@@ -168,12 +200,13 @@ const ProductManagement = ({ products, onProductChange }) => {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700 flex items-center gap-2 ml-1">
                         <Boxes size={14} className="text-slate-400" />
-                        Initial Quantity
+                        Quantity
                       </label>
                       <input 
                         type="number" 
                         name="quantity" 
-                        defaultValue={editingProduct?.quantity} 
+                        value={formQuantity}
+                        onChange={(e) => handleQuantityChange(e.target.value)} 
                         className="block w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-xl outline-none transition-all" 
                         required 
                       />
@@ -181,17 +214,41 @@ const ProductManagement = ({ products, onProductChange }) => {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700 flex items-center gap-2 ml-1">
                         <IndianRupee size={14} className="text-slate-400" />
-                        Price (₹)
+                        Price per Unit (₹)
                       </label>
                       <input 
                         type="number" 
                         step="0.01" 
                         name="price" 
-                        defaultValue={editingProduct?.price} 
+                        value={formPrice}
+                        onChange={(e) => handlePriceChange(e.target.value)} 
                         className="block w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-xl outline-none transition-all" 
                         required 
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2 pt-2">
+                    <label className="text-sm font-bold text-primary flex items-center gap-2 ml-1">
+                      <IndianRupee size={14} className="text-primary/60" />
+                      Total Stock Value (Estimated)
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type="number" 
+                        step="0.01"
+                        value={formTotal.toFixed(2)}
+                        onChange={(e) => handleTotalChange(e.target.value)}
+                        className="block w-full px-4 py-4 bg-primary/5 border-2 border-primary/20 focus:border-primary focus:bg-white rounded-2xl outline-none transition-all font-black text-xl text-primary" 
+                        placeholder="Total Amount"
+                      />
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-primary/40 font-bold text-xs uppercase tracking-widest pointer-events-none">
+                        Auto-Calculated
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-medium px-1 italic">
+                      Changing total amount will automatically update the price per unit.
+                    </p>
                   </div>
                 </div>
 
