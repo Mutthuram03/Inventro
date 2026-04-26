@@ -15,3 +15,4 @@ const AppShell = ({ children }) => {
 };
 
 export default AppShell;
+// Feature update: AppShell
